@@ -79,10 +79,26 @@ public class EventRequestService {
     }
 
     public EventResponse createDailyEvent(EventRequest request) throws SchedulerException, ParseException {
-        EventResponse event = eventScheduler.createDailyEvent (request);
-        return event;
+       return eventScheduler.createDailyEvent (request);
+    }
+    public EventResponse createWeeklyEvent(EventRequest request) throws SchedulerException, ParseException {
+       return eventScheduler.createWeeklyEvent (request);
     }
 
+    public EventResponse createAnniversaryEvent(EventRequest request) throws SchedulerException, ParseException {
+        return eventScheduler.createAnniversaryEvent (request);
+    }
 
-
+    public EventResponse createEveryAlternateWeekDay(EventRequest request) throws SchedulerException, ParseException {
+       return eventScheduler.createEveryAlternateWeekDay (request);
+    }
+    public EventResponse createEveryNthMonth(EventRequest request) throws SchedulerException, ParseException {
+        return eventScheduler.createEveryNthMonth (request);
+    }
+    public EventResponse createEverySecondWeekDayOfMonth(EventRequest request) throws SchedulerException, ParseException {
+       return eventScheduler.createEverySecondWeekDayOfMonth (request);
+    }
+    public List<EventResponse> createEveryMultipleNthDayWeekInMonth(EventRequest request) throws SchedulerException, ParseException {
+         return eventScheduler.createEveryMultipleNthDayWeekInMonth (request);
+    }
 }

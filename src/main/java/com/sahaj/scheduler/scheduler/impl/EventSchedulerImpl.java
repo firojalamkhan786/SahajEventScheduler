@@ -1,7 +1,6 @@
 package com.sahaj.scheduler.scheduler.impl;
 
-import com.sahaj.scheduler.event.EventRequest;
-import com.sahaj.scheduler.event.EventResponse;
+import com.sahaj.scheduler.event.*;
 import com.sahaj.scheduler.jobs.EmailJob;
 import com.sahaj.scheduler.scheduler.EventScheduler;
 import com.sahaj.scheduler.util.EventUtil;
@@ -34,9 +33,10 @@ public class EventSchedulerImpl implements EventScheduler {
 
     @Override
     public EventResponse createDailyEvent(EventRequest request) throws SchedulerException,ParseException{
-        int hours = request.getDateTime ()==null? DEFAULT_HOUR:request.getDateTime ().getHour ();
-        int minutes = request.getDateTime ()==null?DEFAULT_MINUTE : request.getDateTime ().getMinute ();
-        int seconds = request.getDateTime ()==null?DEFAULT_SECONDS:request.getDateTime ().getSecond ();
+        DailyEvent dailyEvent =(DailyEvent)request;
+        int hours = dailyEvent.getHours ()==null? DEFAULT_HOUR: dailyEvent.getHours ();
+        int minutes =  dailyEvent.getMinutes () == null? DEFAULT_MINUTE : dailyEvent.getMinutes ();
+        int seconds = dailyEvent.getSeconds ()==null?DEFAULT_SECONDS:dailyEvent.getSeconds ();
 
         String dailyEventExpression = EventUtil.createDailyEventExpression (hours,minutes,seconds);
         JobDetail jobDetail = scheduleEvent (request, dailyEventExpression);
@@ -107,7 +107,8 @@ public class EventSchedulerImpl implements EventScheduler {
     }
     @Override
     public EventResponse createWeeklyEvent(EventRequest request)throws SchedulerException, ParseException{
-        String dailyEventExpression = EventUtil.createEventEveryWeekExpress (request.getDayName ());
+        WeeklyEvent weeklyEvent = (WeeklyEvent)request;
+        String dailyEventExpression = EventUtil.createEventEveryWeekExpress (weeklyEvent.getDayName ());
         JobDetail jobDetail = scheduleEvent (request, dailyEventExpression);
         return getEventResponse (jobDetail);
     }
@@ -131,28 +132,32 @@ public class EventSchedulerImpl implements EventScheduler {
 
     @Override
     public EventResponse createAnniversaryEvent(EventRequest request) throws SchedulerException, ParseException {
-        String dailyEventExpression = EventUtil.createEventEveryYearExpress (request.getDay (),request.getMonth ());
+        AnniversaryEvent anniversaryEvent = (AnniversaryEvent)request ;
+        String dailyEventExpression = EventUtil.createEventEveryYearExpress (anniversaryEvent.getDay (),anniversaryEvent.getMonth ());
         JobDetail jobDetail = scheduleEvent (request, dailyEventExpression);
         return getEventResponse (jobDetail);
     }
 
     @Override
     public EventResponse createEverySecondWeekDayOfMonth(EventRequest request) throws SchedulerException, ParseException {
-        String dailyEventExpression = EventUtil.createEventEveryTwoWeekExpress (request.getDayName ());
+        WeeklyEvent weeklyEvent =(WeeklyEvent)request;
+        String dailyEventExpression = EventUtil.createEventEveryTwoWeekExpress (weeklyEvent.getDayName ());
         JobDetail jobDetail = scheduleEvent (request, dailyEventExpression);
         return getEventResponse (jobDetail);
     }
 
     @Override
     public EventResponse createEveryAlternateWeekDay(EventRequest request) throws SchedulerException, ParseException {
-        String dailyEventExpression = EventUtil.createEventEveryTwoWeekExpress (request.getDayName ());
+        WeeklyEvent weeklyEvent = (WeeklyEvent)request;
+        String dailyEventExpression = EventUtil.createEventEveryTwoWeekExpress (weeklyEvent.getDayName ());
         JobDetail jobDetail = scheduleEvent (request, dailyEventExpression);
         return getEventResponse (jobDetail);
     }
 
     @Override
     public EventResponse createEveryNthMonth(EventRequest request) throws SchedulerException, ParseException {
-        String dailyEventExpression = EventUtil.createEventEveryTwoMonthExpress (request.getDay (),getMonthFrequency (request.getRepeat ()));
+        MonthlyEvent monthlyEvent = (MonthlyEvent)request;
+        String dailyEventExpression = EventUtil.createEventEveryTwoMonthExpress (monthlyEvent.getDay (),getMonthFrequency (monthlyEvent.getRepeat ()));
         JobDetail jobDetail = scheduleEvent (request, dailyEventExpression);
         return getEventResponse (jobDetail);
     }
@@ -189,14 +194,15 @@ public class EventSchedulerImpl implements EventScheduler {
      */
     @Override
     public List<EventResponse> createEveryMultipleNthDayWeekInMonth(EventRequest request) throws SchedulerException, ParseException {
-        String dayName = request.getRepeatDays ();
+        WeeklyNthDayEvent event = (WeeklyNthDayEvent)request;
+        String dayName = event.getRepeatDays ();
         String dayNames [] = null;
         if(dayName!=null && dayName.contains (",")){
             dayNames =dayName.split (",");
         }
         List<EventResponse> eventResponseList = new ArrayList<> ();
         for (String day:dayNames) {
-            String dailyEventExpression = EventUtil.createEventEveryNThWeekDayExpress (Integer.valueOf (day),request.getDayName ());
+            String dailyEventExpression = EventUtil.createEventEveryNThWeekDayExpress (Integer.valueOf (day),event.getDayName ());
             JobDetail jobDetail = scheduleEvent (request, dailyEventExpression);
             eventResponseList.add (getEventResponse (jobDetail));
         }

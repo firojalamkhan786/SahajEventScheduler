@@ -1,8 +1,10 @@
 package com.sahaj.scheduler.event;
 
+import org.springframework.hateoas.ResourceSupport;
+
 import java.io.Serializable;
 
-public class EventResponse implements Serializable {
+public class EventResponse extends ResourceSupport implements Serializable {
 
     private boolean success;
     private String jobId;
