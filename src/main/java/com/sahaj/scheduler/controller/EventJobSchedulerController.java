@@ -84,6 +84,7 @@ public class EventJobSchedulerController {
     }
 
     @PostMapping("/nthmonthevent")
+    @ApiOperation ("API is used to create Every Nth Month Event.")
     public ResponseEntity<EventResponse> scheduleEveryNthMonthEvent(@Valid @RequestBody MonthlyEvent request){
         try {
             return ResponseEntity.status (HttpStatus.CREATED).body (createEventLink(eventRequestService.createEveryNthMonth(request)));
@@ -92,6 +93,7 @@ public class EventJobSchedulerController {
         }
     }
     @PostMapping("/secondweekdayofmonthevent")
+    @ApiOperation ("API is used to 2nd week day of month event.")
     public ResponseEntity<EventResponse> scheduleEverySecondWeekDayOfMonthEvent(@Valid @RequestBody MonthlyEvent request){
         try {
             return ResponseEntity.status (HttpStatus.CREATED).body (createEventLink(createEventLink(eventRequestService.createEverySecondWeekDayOfMonth (request))));

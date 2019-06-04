@@ -4,7 +4,6 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.TemporalAdjusters;
-import java.time.temporal.TemporalField;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,6 +28,15 @@ public final class EventUtil {
         dayNameValueMap.put("THURSDAY",5);
         dayNameValueMap.put("FRIDAY",6);
         dayNameValueMap.put ("SATURDAY",7);
+        dayNameValueMap.put("SUN",1);
+        dayNameValueMap.put("MON",2);
+        dayNameValueMap.put("TUE",3);
+        dayNameValueMap.put("WED",4);
+        dayNameValueMap.put("THU",5);
+        dayNameValueMap.put("FRI",6);
+        dayNameValueMap.put ("SAT",7);
+
+
     }
     static {
         dayNameMap.put("SUNDAY","SUN");
